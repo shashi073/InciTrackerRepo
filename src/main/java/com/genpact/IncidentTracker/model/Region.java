@@ -5,7 +5,7 @@ public class Region {
 	public Long regionCode;
 	public String regionName;
 	public String regionDesc;
-	public Long countryId;
+	public int countryId;
 	public String countryName;
 	
 	public int getRegionId() {
@@ -32,10 +32,10 @@ public class Region {
 	public void setRegionDesc(String regionDesc) {
 		this.regionDesc = regionDesc;
 	}
-	public Long getCountryId() {
+	public int getCountryId() {
 		return countryId;
 	}
-	public void setCountryId(Long countryId) {
+	public void setCountryId(int countryId) {
 		this.countryId = countryId;
 	}
 	public String getCountryName() {

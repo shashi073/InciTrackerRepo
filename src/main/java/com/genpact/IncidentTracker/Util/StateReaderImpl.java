@@ -1,5 +1,5 @@
 
-package com.genpact.IncidentTracker.service;
+package com.genpact.IncidentTracker.Util;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -11,14 +11,17 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.stereotype.Service;
+
 import com.genpact.IncidentTracker.model.Region;
 import com.genpact.IncidentTracker.model.State;
- 
+
+@Service
 public class StateReaderImpl 
 {
  
     @SuppressWarnings("unchecked")
-	public  void readData(List <Region> regionList) 
+	public  List <State> readData(List <Region> regionList) 
     {
     	List <State> stateList = new ArrayList<State>();
         //JSON parser object to parse read file
@@ -45,6 +48,7 @@ public class StateReaderImpl
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        return stateList;
     }
  
     private static void parseEmployeeObject(JSONObject employee,List <State> stateList, List<Region> regionList) 

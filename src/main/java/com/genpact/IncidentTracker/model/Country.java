@@ -2,14 +2,14 @@ package com.genpact.IncidentTracker.model;
 
 public class Country {
 
-	public Long countryId;
+	public int countryId;
 	public String countryName;
 	public String countryCode;
 	
-	public Long getCountryId() {
+	public int getCountryId() {
 		return countryId;
 	}
-	public void setCountryId(Long countryId) {
+	public void setCountryId(int countryId) {
 		this.countryId = countryId;
 	}
 	public String getCountryName() {

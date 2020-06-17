@@ -4,9 +4,13 @@ public class State {
 	public int stateId;
 	public String stateName;
 	public String stateAbbr;
-	public Long regionCode;
 	public int regionId;
+	public Long regionCode;
+	public String regionName;
 	public Long fipsCode;
+	public int countryId;
+	public String countryName;
+	
 	
 	 
 	public int getStateId() {
@@ -46,6 +50,24 @@ public class State {
 	}
 	public void setFipsCode(Long fipsCode) {
 		this.fipsCode = fipsCode;
+	}
+	public String getRegionName() {
+		return regionName;
+	}
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
+	}
+	public int getCountryId() {
+		return countryId;
+	}
+	public void setCountryId(int countryId) {
+		this.countryId = countryId;
+	}
+	public String getCountryName() {
+		return countryName;
+	}
+	public void setCountryName(String countryName) {
+		this.countryName = countryName;
 	}
 	
 	
