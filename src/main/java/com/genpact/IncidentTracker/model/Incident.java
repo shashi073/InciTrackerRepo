@@ -1,11 +1,18 @@
 package com.genpact.IncidentTracker.model;
 
 public class Incident {
+	
+	
 
+	public Incident() {
+		
+	}
 	public int incidentId;
-	public String incidentType;
 	public String incidentYear;
 	public int localityId;
+	public int count;
+	public int offenseId;
+	public String OffenceName;
 	public String localityName;
 	public String area;
 	public String division;
@@ -24,12 +31,7 @@ public class Incident {
 	public void setIncidentId(int incidentId) {
 		this.incidentId = incidentId;
 	}
-	public String getIncidentType() {
-		return incidentType;
-	}
-	public void setIncidentType(String incidentType) {
-		this.incidentType = incidentType;
-	}
+	
 	public String getIncidentYear() {
 		return incidentYear;
 	}
@@ -68,6 +70,24 @@ public class Incident {
 	}
 	public double getLongitude() {
 		return longitude;
+	}
+	public int getOffenseId() {
+		return offenseId;
+	}
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
+	public void setOffenseId(int offenseId) {
+		this.offenseId = offenseId;
+	}
+	public String getOffenceName() {
+		return OffenceName;
+	}
+	public void setOffenceName(String offenceName) {
+		OffenceName = offenceName;
 	}
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
