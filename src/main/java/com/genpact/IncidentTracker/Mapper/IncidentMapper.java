@@ -15,9 +15,9 @@ public class IncidentMapper implements RowMapper<Incident> {
 		
 		i.setIncidentId(rs.getInt("IncidentId"));
 		i.setIncidentYear(rs.getString("IncidentYear"));
-		i.setCount(300);
-		i.setOffenseId(2);
-		i.setOffenceName(rs.getString("IncidentType"));
+		i.setCount(rs.getInt("IncidentCount"));
+		i.setOffenseId(rs.getInt("OffenseId"));
+		i.setOffenceName(rs.getString("OffenseName"));
 		i.setLocalityId(rs.getInt("LocalityId"));
 		i.setLocalityName(rs.getString("LocalityName"));
 		i.setArea(rs.getString("Area"));

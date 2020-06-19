@@ -16,11 +16,14 @@ public class IncidentController {
 	@Autowired
 	private IncidentService iService;
 	
-	/*
-	 * @RequestMapping(method = RequestMethod.GET, value = "/addLocalities") public
-	 * void addLocalities() { //Dont Use Data has been already updated
-	 * //lService.addLocalities();; }
-	 */
+	
+	  @RequestMapping(method = RequestMethod.GET, value = "/addIncidents")
+	  public  void addIncidents() { 
+		  //Dont Use Data has been already updated
+		  iService.addIncidents();;
+	  }
+	  
+	 
 	@RequestMapping(method = RequestMethod.GET, value = "/getIncidents")
 	public List<Incident> getIncidents() {
 	     return iService.getIncidents();
