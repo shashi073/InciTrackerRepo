@@ -12,7 +12,7 @@ public class Incident {
 	public int localityId;
 	public int count;
 	public int offenseId;
-	public String OffenceName;
+	public String offenceName;
 	public String localityName;
 	public String area;
 	public String division;
@@ -83,12 +83,7 @@ public class Incident {
 	public void setOffenseId(int offenseId) {
 		this.offenseId = offenseId;
 	}
-	public String getOffenceName() {
-		return OffenceName;
-	}
-	public void setOffenceName(String offenceName) {
-		OffenceName = offenceName;
-	}
+	
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
@@ -127,5 +122,11 @@ public class Incident {
 	}
 	public void setCountryName(String countryName) {
 		this.countryName = countryName;
+	}
+	public String getOffenceName() {
+		return offenceName;
+	}
+	public void setOffenceName(String offenceName) {
+		this.offenceName = offenceName;
 	}
 }

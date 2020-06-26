@@ -21,7 +21,7 @@ public class LocaityController {
 	@RequestMapping(method = RequestMethod.GET, value = "/addLocalities")
 	public void addLocalities() {
 		//Dont Use Data has been already updated
-	     //lService.addLocalities();;
+	     lService.addLocalities();;
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/getLocalities")

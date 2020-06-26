@@ -62,7 +62,7 @@ public class IncedentReaderImpl {
 			inc.setOffenceName((String) employee.get("offense"));
 			inc.setLocalityId(localityId);
 			getOffense(inc,  offenses);
-			if(inc.getLocalityId()>0 && inc.getOffenseId()>0) {
+			if(inc.getLocalityId()>0 && inc.getOffenseId()>0 && inc.getCount()>0) {
 				incidents.add(inc);
 			}
 			

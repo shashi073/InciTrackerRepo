@@ -61,7 +61,7 @@ public class StateReaderImpl
     		st.setStateName((String) employee.get("state_name"));
     		st.setStateAbbr((String) employee.get("state_abbr"));
     		st.setRegionCode((Long) employee.get("region_code"));
-    		st.setFipsCode((Long) employee.get("region_code"));
+    		st.setFipsCode((Long) employee.get("state_fips_code"));
     		getRegion(st,regionList);
     		stateList.add(st);
     	}

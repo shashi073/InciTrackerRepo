@@ -3,6 +3,7 @@ package com.genpact.IncidentTracker.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +23,11 @@ public class IncidentController {
 		  //Dont Use Data has been already updated
 		  iService.addIncidents();;
 	  }
-	  
+	  @RequestMapping(method = RequestMethod.POST, value = "/addIncident")
+	  public  void addIncident(@RequestBody Incident inc) { 
+		  //Dont Use Data has been already updated
+		  iService.addIncident(inc);
+	  }
 	 
 	@RequestMapping(method = RequestMethod.GET, value = "/getIncidents")
 	public List<Incident> getIncidents() {

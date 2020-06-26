@@ -31,4 +31,26 @@ public class IncidentRepo {
 		List<Incident> incidents = jdbcTemplate.query(selectQuery, new IncidentMapper());
 		return incidents;
 	}
+
+
+	public void addOrUpdateIncident(Incident inc) {
+		int incidentCount = 0;
+		String selectQuery = "Select i.IncidentId,  i.IncidentYear,i.IncidentCount, o.OffenseId,o.OffenseName, l.LocalityId, l.LocalityName, l.Area, "
+				+ "l.Division, l.Latitude, l.Longitude,s.StateId, s.StateName,r.RegionId, r.RegionName,c.CountryId,c.CountryName"
+				+ " from Incident i join Offence o on i.OffenseId=o.OffenseId join Locality l on i.LocalityId = l.LocalityId join State s "
+				+ "on l.StateId=s.StateId join Region r  on s.RegionId = r.RegionId join Country c on r.CountryId=c.CountryId "
+				+ "where l.LocalityId=? and o.OffenseId=?";
+		List<Incident> incidents = jdbcTemplate.query(selectQuery,new Object[] {inc.getLocalityId(),inc.getOffenseId()}, new IncidentMapper());
+		if(incidents.size()>0) {
+			inc.setCount(incidents.get(0).getCount()+1);
+			String insertQuery = "Update Incident  set IncidentCount=? where IncidentId=?";
+			jdbcTemplate.update(insertQuery,new Object[] {inc.getCount(),incidents.get(0).getIncidentId()}); 
+		}else {
+			inc.setCount(1); 
+			String insertQuery = "Insert into Incident(IncidentType,IncidentYear,LocalityId,OffenseId,IncidentCount) Values(?,?,?,?,?)";
+			jdbcTemplate.update(insertQuery,new Object[] {"ABC",inc.getIncidentYear(),inc.getLocalityId(),inc.getOffenseId(),inc.getCount()}); 
+		}
+		  
+		
+	}
 }

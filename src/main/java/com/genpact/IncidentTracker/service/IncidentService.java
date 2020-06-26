@@ -9,10 +9,10 @@ import com.genpact.IncidentTracker.Util.IncedentReaderImpl;
 import com.genpact.IncidentTracker.model.Incident;
 import com.genpact.IncidentTracker.model.Locality;
 import com.genpact.IncidentTracker.model.Offense;
-import com.genpact.IncidentTracker.model.State;
 import com.genpact.IncidentTracker.repository.IncidentRepo;
 import com.genpact.IncidentTracker.repository.LocalityRepo;
 import com.genpact.IncidentTracker.repository.OffenseRepo;
+import com.genpact.IncidentTracker.repository.StateRepo;
 
 @Service
 public class IncidentService {
@@ -25,6 +25,8 @@ public class IncidentService {
 	private LocalityRepo lRepo;
 	@Autowired
 	private IncidentRepo iRepo;
+	@Autowired
+	private StateRepo sRepo;
 
 	
 	 public void addIncidents() {
@@ -44,5 +46,40 @@ public class IncidentService {
 	public List<Incident> getIncidents() {
 		
 		return iRepo.getIncidents();
+	}
+
+
+	public String addIncident(Incident inc) {
+		 String status = "Incident Updated Succesfully";
+		 sRepo.updateStateId(inc);
+	   
+	     if(inc.getStateId()<=0) {
+	    	 status = "State Details Not Found";
+	     }
+	     else {
+	    		 Locality l= new Locality();
+	    		 l.setOri("ManualIncident");
+	    		 l.setLocalityName(inc.getLocalityName());
+	    		 l.setArea(inc.getArea());
+	    		 l.setDivision(inc.getDivision());
+	    		 l.setLatitude(inc.getLatitude());
+	    		 l.setLongitude(inc.getLongitude());
+	    		 l.setStateId(inc.getStateId());
+	    		 l.setStateName(inc.getStateName());
+	    		 int lId=lRepo.addOrUpdateLocalityAndGetId(l);
+	    		 
+	    		 if(lId<=0) {
+	    			 status = "Locality Details not found"; 
+	    		 }else {
+	    			 inc.setLocalityId(lId);
+	    			 if(inc.getOffenseId()<=0) {
+	    				 status = "Offence Details Not Found";
+	    			 }else {
+	    				 iRepo.addOrUpdateIncident(inc);
+	    			 }
+	    		 }
+	    	 
+	     }
+		return status;
 	}
 }
