@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.genpact.IncidentTracker.model.HeatMapList;
 import com.genpact.IncidentTracker.model.Incident;
 import com.genpact.IncidentTracker.service.IncidentService;
 
@@ -32,5 +33,10 @@ public class IncidentController {
 	@RequestMapping(method = RequestMethod.GET, value = "/getIncidents")
 	public List<Incident> getIncidents() {
 	     return iService.getIncidents();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/getIncidentsHeatMap")
+	public List<HeatMapList> getIncidentsHeatMap() {
+	     return iService.getIncidentsHeatMap();
 	}
 }
