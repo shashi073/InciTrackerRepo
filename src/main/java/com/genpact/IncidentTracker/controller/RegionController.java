@@ -20,7 +20,7 @@ public class RegionController {
 	@RequestMapping(method = RequestMethod.GET, value = "/addRegions")
 	public void addRegions() {
 		//Dont Use Data has been already updated
-	    rService.addRegions();;
+	   // rService.addRegions();;
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/getRegions")

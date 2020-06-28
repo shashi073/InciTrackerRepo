@@ -19,7 +19,7 @@ public class StateController {
 	@RequestMapping(method = RequestMethod.GET, value = "/addStates")
 	public void addStates() {
 		//Dont Use Data has been already updated
-	     sService.addStates();
+	    // sService.addStates();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/getStates")

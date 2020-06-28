@@ -23,7 +23,7 @@ public class IncidentController {
 	  @RequestMapping(method = RequestMethod.GET, value = "/addIncidents")
 	  public  void addIncidents() { 
 		  //Dont Use Data has been already updated
-		  iService.addIncidents();;
+		  //iService.addIncidents();;
 	  }
 	  @RequestMapping(method = RequestMethod.POST, value = "/addIncident")
 	  public  void addIncident(@RequestBody Incident inc) { 
