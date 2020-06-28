@@ -5,12 +5,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.genpact.IncidentTracker.Util.IncedentReaderImpl;
 import com.genpact.IncidentTracker.model.FormattedIncidents;
+import com.genpact.IncidentTracker.Util.Key;
+import com.genpact.IncidentTracker.model.HeatMapList;
 import com.genpact.IncidentTracker.model.Incident;
 import com.genpact.IncidentTracker.model.Locality;
 import com.genpact.IncidentTracker.model.Offense;
@@ -54,6 +59,34 @@ public class IncidentService {
 		return iRepo.getIncidents();
 	}
 
+	public List<HeatMapList> getIncidentsHeatMap(){
+		List<Incident> lstIncident = iRepo.getIncidents();
+		List<HeatMapList> lstHeatMap = new ArrayList<HeatMapList>();
+		
+		Map<Key, Integer> map = new HashMap<Key, Integer>();
+		
+		for(Incident eachIncident : lstIncident) {
+			Key keyObj = new Key(eachIncident.getLatitude(), eachIncident.getLongitude());
+			
+			if(map.get(keyObj) == null) {
+				map.put(keyObj, eachIncident.count);
+			} else {
+				int existingCount = map.get(keyObj);
+				existingCount = existingCount + eachIncident.count;
+				map.put(keyObj, existingCount);
+			}
+		}
+		
+		
+		for(Map.Entry<Key, Integer> eachMap: map.entrySet()) {
+			HeatMapList heatMap = new HeatMapList();
+			heatMap.setLatitude(eachMap.getKey().getLatitude());
+			heatMap.setLongitude(eachMap.getKey().getLongitude());
+			heatMap.setWeight(eachMap.getValue());
+			lstHeatMap.add(heatMap);
+		}
+		return lstHeatMap;
+	}
 
 	public String addIncident(Incident inc) {
 		 String status = "Incident Updated Succesfully";
