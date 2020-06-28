@@ -19,7 +19,6 @@ import com.genpact.IncidentTracker.model.HeatMapList;
 import com.genpact.IncidentTracker.model.Incident;
 import com.genpact.IncidentTracker.model.Locality;
 import com.genpact.IncidentTracker.model.Offense;
-import com.genpact.IncidentTracker.model.OffenseData;
 import com.genpact.IncidentTracker.repository.IncidentRepo;
 import com.genpact.IncidentTracker.repository.LocalityRepo;
 import com.genpact.IncidentTracker.repository.OffenseRepo;
@@ -145,28 +144,34 @@ public class IncidentService {
 			  
 			  FormattedIncidents fIncident= new FormattedIncidents();
 			  int weight = entry.getValue().stream().mapToInt(e->e.getCount()).sum();
-			  List <OffenseData> oDatas = new ArrayList<OffenseData>();
+			  
 			  
 			  fIncident.setIncidentId( entry.getValue().get(0).getIncidentId());
-			  fIncident.setIncidentYear( entry.getValue().get(0).getIncidentYear());
-			  fIncident.setLocalityId( entry.getValue().get(0).getLocalityId());
-			  fIncident.setLocalityName( entry.getValue().get(0).getLocalityName());
-			  fIncident.setArea( entry.getValue().get(0).getArea());
-			  fIncident.setDivision( entry.getValue().get(0).getDivision());
-			  fIncident.setLatitude( entry.getValue().get(0).getLatitude());
-			  fIncident.setLongitude( entry.getValue().get(0).getLongitude());
-			  fIncident.setStateId( entry.getValue().get(0).getStateId());
-			  fIncident.setStateName( entry.getValue().get(0).getStateName());
-			  fIncident.setRegionId( entry.getValue().get(0).getRegionId());
-			  fIncident.setRegionName( entry.getValue().get(0).getRegionName());
-			  fIncident.setCountryId( entry.getValue().get(0).getCountryId());
-			  fIncident.setCountryName( entry.getValue().get(0).getCountryName());
-			  fIncident.setWeight(weight);
+			  fIncident.setIncidentYear( entry.getValue().get(0).getIncidentYear()); 
+			  
+			  fIncident.getBasicData().setLatitude( entry.getValue().get(0).getLatitude());
+			  fIncident.getBasicData().setLongitude( entry.getValue().get(0).getLongitude());
+			  fIncident.getBasicData().setWeight(weight);
+			  
+			  
+			  
+			  fIncident.getOtherData().setLocalityId( entry.getValue().get(0).getLocalityId());
+			  fIncident.getOtherData().setLocalityName( entry.getValue().get(0).getLocalityName());
+			  fIncident.getOtherData().setArea( entry.getValue().get(0).getArea());
+			  fIncident.getOtherData().setDivision( entry.getValue().get(0).getDivision());
+			  fIncident.getOtherData().setStateId( entry.getValue().get(0).getStateId());
+			  fIncident.getOtherData().setStateName( entry.getValue().get(0).getStateName());
+			  fIncident.getOtherData().setRegionId( entry.getValue().get(0).getRegionId());
+			  fIncident.getOtherData().setRegionName( entry.getValue().get(0).getRegionName());
+			  fIncident.getOtherData().setCountryId( entry.getValue().get(0).getCountryId());
+			  fIncident.getOtherData().setCountryName( entry.getValue().get(0).getCountryName());
+			  
 			  
 			  for(Incident inc:entry.getValue()) {
-				  OffenseData oData= new OffenseData();
+				  Offense oData= new Offense();
 				  oData.setOffenseId(inc.getOffenseId());
-				  oData.setOffenceName(inc.getOffenceName());
+				  oData.setOffenseName(inc.getOffenceName());
+				  oData.setDescription(inc.getOffenceName());
 				  oData.setCount(inc.getCount());
 				  fIncident.getOffenseList().add(oData);
 			  }

@@ -4,14 +4,24 @@ public class Offense {
 	
   public int offenseId;
   public String offenseName;
-  public String value;
+  public String description;
+  public int count;
   
-	public String getValue() {
-	return value;
-}
-public void setValue(String value) {
-	this.value = value;
-}
+  
+  
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
+ 	
 	public int getOffenseId() {
 		return offenseId;
 	}
