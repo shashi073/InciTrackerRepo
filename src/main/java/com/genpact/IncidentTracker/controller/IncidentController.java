@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.genpact.IncidentTracker.model.FormattedIncidents;
 import com.genpact.IncidentTracker.model.Incident;
 import com.genpact.IncidentTracker.service.IncidentService;
 
@@ -32,5 +34,17 @@ public class IncidentController {
 	@RequestMapping(method = RequestMethod.GET, value = "/getIncidents")
 	public List<Incident> getIncidents() {
 	     return iService.getIncidents();
+	}
+	@RequestMapping(method = RequestMethod.GET, value = "/getIncidentsListFormatted")
+	public List<FormattedIncidents> getIncidentsListFormatted() {
+	     return iService.getIncidentsListFormatted();
+	}
+	@RequestMapping(method = RequestMethod.GET, value = "/getIncidentsListByStateFormatted")
+	public List<FormattedIncidents> getIncidentsListByStateFormatted(@RequestParam String stateName) {
+	     return iService.getIncidentsListByStateFormatted(stateName);
+	}
+	@RequestMapping(method = RequestMethod.GET, value = "/getIncidentsListByLatLngFormatted")
+	public List<FormattedIncidents> getIncidentsListByLatLngFormatted(@RequestParam double lat, @RequestParam double lng) {
+	     return iService.getIncidentsListByLatLngFormatted(lat,lng);
 	}
 }
