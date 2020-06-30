@@ -9,6 +9,7 @@ import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.genpact.IncidentTracker.Util.IncedentReaderImpl;
+import com.genpact.IncidentTracker.model.AddIncidentRequest;
 import com.genpact.IncidentTracker.model.FormattedIncidents;
 import com.genpact.IncidentTracker.Util.Key;
 import com.genpact.IncidentTracker.model.HeatMapList;
@@ -83,11 +84,11 @@ public class IncidentService {
 		return lstHeatMap;
 	}
 
-	public String addIncident(Incident inc) {
+	public String addIncident(AddIncidentRequest inc) {
 		 String status = "Incident Updated Succesfully";
-		 sRepo.updateStateId(inc);
+		 int stateId =sRepo.updateStateId(inc);
 	   
-	     if(inc.getStateId()<=0) {
+	     if(stateId<=0) {
 	    	 status = "State Details Not Found";
 	     }
 	     else {
@@ -98,24 +99,27 @@ public class IncidentService {
 	    		 l.setDivision(inc.getDivision());
 	    		 l.setLatitude(inc.getLatitude());
 	    		 l.setLongitude(inc.getLongitude());
-	    		 l.setStateId(inc.getStateId());
+	    		 l.setStateId(stateId);
 	    		 l.setStateName(inc.getStateName());
 	    		 int lId=lRepo.addOrUpdateLocalityAndGetId(l);
 	    		 
 	    		 if(lId<=0) {
 	    			 status = "Locality Details not found"; 
 	    		 }else {
-	    			 inc.setLocalityId(lId);
+	    			 
 	    			 if(inc.getOffenseId()<=0) {
 	    				 status = "Offence Details Not Found";
 	    			 }else {
-	    				 iRepo.addOrUpdateIncident(inc);
+	    				 iRepo.addOrUpdateIncident(inc, lId);
 	    			 }
 	    		 }
 	    	 
 	     }
 		return status;
 	}
+	
+	
+	
 
 
 	public List<FormattedIncidents> getIncidentsListFormatted() {
@@ -181,7 +185,9 @@ public class IncidentService {
 		
 	}
 
-
+	public int getCount(double lat, double lng) {
+		return iRepo.getCount(lat, lng);
+	}
 	
 
 

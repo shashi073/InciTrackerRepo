@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.genpact.IncidentTracker.Mapper.StateMapper;
+import com.genpact.IncidentTracker.model.AddIncidentRequest;
 import com.genpact.IncidentTracker.model.Incident;
 import com.genpact.IncidentTracker.model.State;
 
@@ -27,14 +28,15 @@ public class StateRepo {
 		return states;
 	}
 
-	public void updateStateId(Incident inc) {
+	public int updateStateId(AddIncidentRequest inc) {
+		int stateId=0;
 		String selectQuery = "Select s.StateId,s.StateName,s.StateAbbr,s.FipsCode,r.RegionId, r.RegionCode,r.RegionName,"
 							 + "c.CountryId,c.CountryName from State s join Region r  on s.RegionId = r.RegionId join Country c"
 							 + " on r.CountryId=c.CountryId where s.StateName=?";
 		List<State> states = jdbcTemplate.query(selectQuery,new Object[] {inc.getStateName()}, new StateMapper());
 		if(states.size()>0) {
-			inc.setStateId(states.get(0).getStateId());
+			stateId =states.get(0).getStateId();
 		}
-		
+		return stateId;
 	}
 }

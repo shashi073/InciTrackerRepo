@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.genpact.IncidentTracker.model.AddIncidentRequest;
 import com.genpact.IncidentTracker.model.FormattedIncidents;
 import com.genpact.IncidentTracker.model.HeatMapList;
 import com.genpact.IncidentTracker.model.Incident;
@@ -26,7 +28,7 @@ public class IncidentController {
 		  //iService.addIncidents();;
 	  }
 	  @RequestMapping(method = RequestMethod.POST, value = "/addIncident")
-	  public  void addIncident(@RequestBody Incident inc) { 
+	  public  void addIncident(@RequestBody AddIncidentRequest inc) { 
 		  //Dont Use Data has been already updated
 		  iService.addIncident(inc);
 	  }
@@ -53,4 +55,9 @@ public class IncidentController {
 	public List<HeatMapList> getIncidentsHeatMap() {
 	     return iService.getIncidentsHeatMap();
 	}
+	 @RequestMapping(method = RequestMethod.POST, value = "/getCount")
+	  public  void getCount(@RequestParam double lat, @RequestParam double lng) { 
+		  //Dont Use Data has been already updated
+		  iService.getCount(lat,lng);
+	  }
 }
