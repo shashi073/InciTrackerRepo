@@ -18,6 +18,7 @@ public class OffenseMapper implements RowMapper<Offense>
 		o.setOffenseId(rs.getInt("OffenseId"));
 		o.setOffenseName(rs.getString("OffenseName"));
 		o.setDescription(rs.getString("OffenseName"));
+		o.setValue(rs.getString("OffenseName"));
 		o.setCount(0);
 		return o;
 	}
