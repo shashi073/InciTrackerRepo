@@ -55,9 +55,10 @@ public class IncidentController {
 	public List<HeatMapList> getIncidentsHeatMap() {
 	     return iService.getIncidentsHeatMap();
 	}
-	 @RequestMapping(method = RequestMethod.POST, value = "/getCount")
-	  public  void getCount(@RequestParam double lat, @RequestParam double lng) { 
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/getCount")
+	public int getCount(@RequestParam double lat, @RequestParam double lng) { 
 		  //Dont Use Data has been already updated
-		  iService.getCount(lat,lng);
-	  }
+		  return iService.getCount(lat,lng);
+	}
 }

@@ -49,9 +49,9 @@ public class IncidentRepo {
 			String insertQuery = "Update Incident  set IncidentCount=? where IncidentId=?";
 			jdbcTemplate.update(insertQuery,new Object[] {incidents.get(0).getCount()+1,incidents.get(0).getIncidentId()}); 
 		}else { 
-			String insertQuery = "Insert into Incident(IncidentYear,LocalityId,OffenseId,IncidentCount)"
+			String insertQuery = "Insert into Incident(IncidentYear,LocalityId,OffenseId,IncidentCount, IncidentType)"
 					+ " Values(?,?,?,?,?)";
-			jdbcTemplate.update(insertQuery,new Object[] {year,localityId,inc.getOffenseId(),1}); 
+			jdbcTemplate.update(insertQuery,new Object[] {year,localityId,inc.getOffenseId(),1, "PQR"}); 
 		}
 		
 		String insertQuery = "Insert into LiveIncident(OffenseId,LocalityId,Description,CreatedDate)"
@@ -90,10 +90,11 @@ public class IncidentRepo {
 		String selectQuery = "Select sum(i.IncidentCount) from Incident i join Offence o on i.OffenseId=o.OffenseId join Locality l "
 				+ "on i.LocalityId = l.LocalityId join State s on l.StateId=s.StateId join Region r  on s.RegionId = r.RegionId"
 				+ " join Country c on r.CountryId=c.CountryId where (l.Latitude between ? AND ?) AND (l.Longitude between ? AND ?)";
-		List<Integer> incidents = jdbcTemplate.queryForList(selectQuery,new Object[] {lat-10.00, lat+10.00, lng-10.00, lng+10.00},
+		List<Integer> incidents = jdbcTemplate.queryForList(selectQuery,new Object[] {lat-0.50, lat+0.50, lng-0.50, lng+0.50},
 										Integer.class);
+		System.out.println(incidents);
 		if(incidents.size()>0) {
-			count = incidents.get(0);
+			count = incidents.get(0) != null ? incidents.get(0) : 0;
 		}
 		return count;
 	}
