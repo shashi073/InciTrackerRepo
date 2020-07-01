@@ -8,8 +8,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.genpact.IncidentTracker.Mapper.IncidentMapper;
+import com.genpact.IncidentTracker.Mapper.LiveIncidentMapper;
+import com.genpact.IncidentTracker.Mapper.ModifiedTickerMapper;
 import com.genpact.IncidentTracker.model.AddIncidentRequest;
 import com.genpact.IncidentTracker.model.Incident;
+import com.genpact.IncidentTracker.model.LiveIncident;
+import com.genpact.IncidentTracker.model.ModifiedTicker;
 
 @Repository
 public class IncidentRepo {
@@ -49,9 +53,9 @@ public class IncidentRepo {
 			String insertQuery = "Update Incident  set IncidentCount=? where IncidentId=?";
 			jdbcTemplate.update(insertQuery,new Object[] {incidents.get(0).getCount()+1,incidents.get(0).getIncidentId()}); 
 		}else { 
-			String insertQuery = "Insert into Incident(IncidentYear,LocalityId,OffenseId,IncidentCount, IncidentType)"
+			String insertQuery = "Insert into Incident(IncidentYear,LocalityId,OffenseId,IncidentCount)"
 					+ " Values(?,?,?,?,?)";
-			jdbcTemplate.update(insertQuery,new Object[] {year,localityId,inc.getOffenseId(),1, "PQR"}); 
+			jdbcTemplate.update(insertQuery,new Object[] {year,localityId,inc.getOffenseId(),1,}); 
 		}
 		
 		String insertQuery = "Insert into LiveIncident(OffenseId,LocalityId,Description,CreatedDate)"
@@ -97,6 +101,26 @@ public class IncidentRepo {
 			count = incidents.get(0) != null ? incidents.get(0) : 0;
 		}
 		return count;
+	}
+	
+	public List<LiveIncident> getLiveIncidentsListByLatLngFormatted(double lat, double lng) {
+		String selectQuery = "Select i.IncidentId,  i.CreatedDate,i.Description, o.OffenseId,o.OffenseName, l.LocalityId, "
+				+ "l.LocalityName, l.Area, l.Division, l.Latitude, l.Longitude,s.StateId, s.StateName,r.RegionId, r.RegionName,"
+				+ "c.CountryId,c.CountryName from LiveIncident i join Offence o on i.OffenseId=o.OffenseId join Locality l "
+				+ "on i.LocalityId = l.LocalityId join State s on l.StateId=s.StateId join Region r  on s.RegionId = r.RegionId"
+				+ " join Country c on r.CountryId=c.CountryId where (l.Latitude between ? AND ?) AND (l.Longitude between ? AND ?)";
+		List<LiveIncident> incidents = jdbcTemplate.query(selectQuery,new Object[] {lat-0.50, lat+0.50, lng-0.50, lng+0.50}, 
+				new LiveIncidentMapper());
+		return incidents;
+	}
+	
+	public List<ModifiedTicker> getTickerListByLatLngFormatted(double lat, double lng) {
+		String selectQuery = "Select i.IncidentId, o.OffenseId,o.OffenseName from LiveIncident i join Offence o on i.OffenseId=o.OffenseId "
+				+ "join Locality l on i.LocalityId = l.LocalityId  where (l.Latitude between ? AND ?) "
+				+ "AND (l.Longitude between ? AND ?)";
+		List<ModifiedTicker> tickers= jdbcTemplate.query(selectQuery,new Object[] {lat-0.50, lat+0.50, lng-0.50, lng+0.50}, 
+				new ModifiedTickerMapper());
+		return tickers;
 	}
 	
 }

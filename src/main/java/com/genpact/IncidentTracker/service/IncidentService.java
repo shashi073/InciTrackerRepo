@@ -14,7 +14,9 @@ import com.genpact.IncidentTracker.model.FormattedIncidents;
 import com.genpact.IncidentTracker.Util.Key;
 import com.genpact.IncidentTracker.model.HeatMapList;
 import com.genpact.IncidentTracker.model.Incident;
+import com.genpact.IncidentTracker.model.LiveIncident;
 import com.genpact.IncidentTracker.model.Locality;
+import com.genpact.IncidentTracker.model.ModifiedTicker;
 import com.genpact.IncidentTracker.model.Offense;
 import com.genpact.IncidentTracker.repository.IncidentRepo;
 import com.genpact.IncidentTracker.repository.LocalityRepo;
@@ -189,7 +191,12 @@ public class IncidentService {
 		return iRepo.getCount(lat, lng);
 	}
 	
+	public List<LiveIncident> getLiveIncidentsListByLatLngFormatted(double lat, double lng){
+		return iRepo.getLiveIncidentsListByLatLngFormatted(lat, lng);
+	}
 
-
+	public List<ModifiedTicker> getTickerListByLatLngFormatted(double lat, double lng){
+		return iRepo.getTickerListByLatLngFormatted(lat, lng);
+	}
 	
 }

@@ -10,9 +10,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.genpact.IncidentTracker.model.AddIncidentRequest;
+import com.genpact.IncidentTracker.model.Comment;
 import com.genpact.IncidentTracker.model.FormattedIncidents;
 import com.genpact.IncidentTracker.model.HeatMapList;
 import com.genpact.IncidentTracker.model.Incident;
+import com.genpact.IncidentTracker.model.LiveIncident;
+import com.genpact.IncidentTracker.model.ModifiedTicker;
+import com.genpact.IncidentTracker.service.CommentService;
 import com.genpact.IncidentTracker.service.IncidentService;
 
 @RestController
@@ -20,7 +24,6 @@ public class IncidentController {
 
 	@Autowired
 	private IncidentService iService;
-	
 	
 	  @RequestMapping(method = RequestMethod.GET, value = "/addIncidents")
 	  public  void addIncidents() { 
@@ -61,4 +64,13 @@ public class IncidentController {
 		  //Dont Use Data has been already updated
 		  return iService.getCount(lat,lng);
 	}
+	@RequestMapping(method = RequestMethod.GET, value = "/getLiveIncidentsListByLatLngFormatted")
+	public List<LiveIncident> getLiveIncidentsListByLatLngFormatted(double lat, double lng){
+		return iService.getLiveIncidentsListByLatLngFormatted(lat, lng);
+	}
+	@RequestMapping(method = RequestMethod.GET, value = "/getTickerListByLatLngFormatted")
+	public List<ModifiedTicker> getTickerListByLatLngFormatted(double lat, double lng){
+		return iService.getTickerListByLatLngFormatted(lat, lng);
+	}
+	
 }
