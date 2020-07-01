@@ -151,7 +151,7 @@ public class IncidentService {
 			  
 			  fIncident.getBasicData().setLatitude( entry.getValue().get(0).getLatitude());
 			  fIncident.getBasicData().setLongitude( entry.getValue().get(0).getLongitude());
-			  fIncident.getBasicData().setWeight(weight);
+			  fIncident. setWeight(weight);
 			  
 			  
 			  

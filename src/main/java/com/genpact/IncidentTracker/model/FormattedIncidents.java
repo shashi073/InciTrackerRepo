@@ -17,6 +17,14 @@ public class  FormattedIncidents {
 	public List<Offense> offenseList;
 	public int incidentId;
 	public String incidentYear;
+	public int weight;
+	
+	public int getWeight() {
+		return weight;
+	}
+	public void setWeight(int weight) {
+		this.weight = weight;
+	}
 	
 	public int getIncidentId() {
 		return incidentId;

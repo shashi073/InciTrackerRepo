@@ -80,7 +80,7 @@ public class IncidentRepo {
 				+ "c.CountryId,c.CountryName from Incident i join Offence o on i.OffenseId=o.OffenseId join Locality l "
 				+ "on i.LocalityId = l.LocalityId join State s on l.StateId=s.StateId join Region r  on s.RegionId = r.RegionId"
 				+ " join Country c on r.CountryId=c.CountryId where (l.Latitude between ? AND ?) AND (l.Longitude between ? AND ?)";
-		List<Incident> incidents = jdbcTemplate.query(selectQuery,new Object[] {lat-3.00, lat+3.00, lng-3.00, lng+3.00}, 
+		List<Incident> incidents = jdbcTemplate.query(selectQuery,new Object[] {lat-0.50, lat+0.50, lng-0.50, lng+0.50}, 
 				new IncidentMapper());
 		return incidents;
 	}
