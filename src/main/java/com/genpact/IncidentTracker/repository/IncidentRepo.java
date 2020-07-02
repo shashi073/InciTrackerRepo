@@ -1,10 +1,16 @@
 package com.genpact.IncidentTracker.repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.genpact.IncidentTracker.Mapper.IncidentMapper;
@@ -40,9 +46,11 @@ public class IncidentRepo {
 	}
 
 
-	public void addOrUpdateIncident(AddIncidentRequest inc, int localityId) {
+	public String addOrUpdateIncident(AddIncidentRequest inc, int localityId) {
 		LocalDateTime dt= LocalDateTime.now();
 		int year = dt.getYear();
+		System.out.println(dt.toString());
+		String incidentId;
 		String selectQuery = "Select i.IncidentId,  i.IncidentYear,i.IncidentCount, o.OffenseId,o.OffenseName, l.LocalityId,"
 				+ " l.LocalityName, l.Area, l.Division, l.Latitude, l.Longitude,s.StateId, s.StateName,r.RegionId, "
 				+ "r.RegionName,c.CountryId,c.CountryName from Incident i join Offence o on i.OffenseId=o.OffenseId join"
@@ -58,10 +66,23 @@ public class IncidentRepo {
 			jdbcTemplate.update(insertQuery,new Object[] {year,localityId,inc.getOffenseId(),1,}); 
 		}
 		
-		String insertQuery = "Insert into LiveIncident(OffenseId,LocalityId,Description,CreatedDate)"
-				+ " Values(?,?,?,?)";
-		
-		jdbcTemplate.update(insertQuery,new Object[] {inc.getOffenseId(),localityId,inc.getDescription(),dt}); 
+		final String INSERT_SQL = "Insert into LiveIncident(OffenseId,LocalityId,Description,CreatedDate) Values(?,?,?,?)";
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		jdbcTemplate.update(
+		    new PreparedStatementCreator() {
+		        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+		            PreparedStatement ps =
+		                connection.prepareStatement(INSERT_SQL, new String[] {"IncidentId"});
+		            ps.setInt(1,inc.getOffenseId());
+		            ps.setInt(2, localityId);
+		            ps.setString(3, inc.getDescription());
+		            ps.setString(4, dt.toString());
+		            return ps;
+		        }
+		    },
+		    keyHolder);
+		incidentId = String.valueOf(keyHolder.getKey());
+		return incidentId;
 		  
 		
 	}

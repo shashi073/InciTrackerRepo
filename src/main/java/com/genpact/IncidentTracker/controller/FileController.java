@@ -1,6 +1,9 @@
 package com.genpact.IncidentTracker.controller;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,5 +63,21 @@ public class FileController {
 	@RequestMapping(method = RequestMethod.GET, value = "/getImages")
 	public List<ImageFile> getImages(@RequestParam int incidentId) {
 	     return cService.getImages(incidentId);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/getPath")
+	public void getPath() {
+		 System.out.println("Working Directory = " + System.getProperty("user.dir"));
+		Path currentRelativePath = Paths.get("");
+		String s = currentRelativePath.toAbsolutePath().toString();
+		System.out.println("Current relative path is: " + s);
+		System.out.println("Current relative path is: " + currentRelativePath.toString());
+		File f = new File("C:\\Work\\Java\\InciTrackerRepo\\test.txt");
+		try {
+			System.out.println(f.getPath()+"---"+f.getAbsolutePath()+"---"+f.getCanonicalPath());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

@@ -112,7 +112,7 @@ public class IncidentService {
 	    			 if(inc.getOffenseId()<=0) {
 	    				 status = "Offence Details Not Found";
 	    			 }else {
-	    				 iRepo.addOrUpdateIncident(inc, lId);
+	    				status = String.valueOf(iRepo.addOrUpdateIncident(inc, lId));
 	    			 }
 	    		 }
 	    	 
