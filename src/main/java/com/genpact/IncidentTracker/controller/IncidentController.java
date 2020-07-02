@@ -31,9 +31,10 @@ public class IncidentController {
 		  //iService.addIncidents();;
 	  }
 	  @RequestMapping(method = RequestMethod.POST, value = "/addIncident")
-	  public  void addIncident(@RequestBody AddIncidentRequest inc) { 
+	  public  String addIncident(@RequestBody AddIncidentRequest inc) { 
 		  //Dont Use Data has been already updated
-		  iService.addIncident(inc);
+		 String id = iService.addIncident(inc);
+		 return id;
 	  }
 	 
 	@RequestMapping(method = RequestMethod.GET, value = "/getIncidents")

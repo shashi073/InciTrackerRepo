@@ -62,8 +62,8 @@ public class IncidentRepo {
 			jdbcTemplate.update(insertQuery,new Object[] {incidents.get(0).getCount()+1,incidents.get(0).getIncidentId()}); 
 		}else { 
 			String insertQuery = "Insert into Incident(IncidentYear,LocalityId,OffenseId,IncidentCount)"
-					+ " Values(?,?,?,?,?)";
-			jdbcTemplate.update(insertQuery,new Object[] {year,localityId,inc.getOffenseId(),1,}); 
+					+ " Values(?,?,?,?)";
+			jdbcTemplate.update(insertQuery,new Object[] {year,localityId,inc.getOffenseId(),1}); 
 		}
 		
 		final String INSERT_SQL = "Insert into LiveIncident(OffenseId,LocalityId,Description,CreatedDate) Values(?,?,?,?)";
