@@ -4,10 +4,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
 import com.genpact.IncidentTracker.Mapper.StateMapper;
 import com.genpact.IncidentTracker.model.AddIncidentRequest;
-import com.genpact.IncidentTracker.model.Incident;
 import com.genpact.IncidentTracker.model.State;
 
 @Repository

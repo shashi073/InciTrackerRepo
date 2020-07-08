@@ -16,11 +16,14 @@ public class OffenseController {
 	@Autowired
 	private OffenseService oService;
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/addOffenses")
-	public void addOffenses() {
-		//Dont Use Data has been already updated
-	    // oService.addOffenses();
-	}
+	/*
+	 * @RequestMapping(method = RequestMethod.GET, value = "/addOffenses")
+	 *  public void addOffenses() 
+	 *  { 
+	 *  //Dont Use Data has been already updated //
+	 *  oService.addOffenses(); 
+	 *  }
+	 */
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/getOffenses")
 	public List<Offense> getOffenses() {

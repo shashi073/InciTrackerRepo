@@ -2,10 +2,7 @@ package com.genpact.IncidentTracker.Mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import org.springframework.jdbc.core.RowMapper;
-
-import com.genpact.IncidentTracker.model.Incident;
 import com.genpact.IncidentTracker.model.ModifiedTicker;
 
 public class ModifiedTickerMapper implements RowMapper<ModifiedTicker> {

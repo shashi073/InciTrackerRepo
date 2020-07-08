@@ -16,14 +16,18 @@ public class CountryController {
 	@Autowired
 	private CountryService cService;
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/addCountries")
-	public void addCountries() {
-		//Dont Use Data has been already updated
-	     //cService.addCountries();
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/addCountries") 
+	public void addCountries() { 
+	   //Dont Use Data has been already updated
+	   //cService.addCountries(); 
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/getCountries")
-	public List<Country> getCountries() {
-	     return cService.getCountries();
-	}
+	 
+	 @RequestMapping(method = RequestMethod.GET, value = "/getCountries") 
+	 public List<Country> getCountries() 
+	 { 
+		 return cService.getCountries(); 
+	 }
+	
 }

@@ -16,14 +16,18 @@ public class StateController {
 	@Autowired
 	private StateService sService;
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/addStates")
-	public void addStates() {
-		//Dont Use Data has been already updated
-	    // sService.addStates();
-	}
-	
-	@RequestMapping(method = RequestMethod.GET, value = "/getStates")
-	public List<State> getStates() {
-	     return sService.getStates();
-	}
+	/*
+	 * @RequestMapping(method = RequestMethod.GET, value = "/addStates") 
+	 * public void addStates() 
+	 * {
+	 *   //Dont Use Data has been already updated //
+	 *   sService.addStates(); 
+	 * }
+	 */
+	  @RequestMapping(method = RequestMethod.GET, value = "/getStates")
+	  public List<State> getStates() 
+	  { 
+		  return sService.getStates();
+	  }
+	 
 }

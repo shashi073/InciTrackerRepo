@@ -5,19 +5,16 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-
-import com.genpact.IncidentTracker.Mapper.IncidentMapper;
 import com.genpact.IncidentTracker.Mapper.LiveIncidentMapper;
 import com.genpact.IncidentTracker.Mapper.ModifiedTickerMapper;
 import com.genpact.IncidentTracker.model.AddIncidentRequest;
-import com.genpact.IncidentTracker.model.Incident;
+import com.genpact.IncidentTracker.model.AggregatedIncident;
 import com.genpact.IncidentTracker.model.LiveIncident;
 import com.genpact.IncidentTracker.model.ModifiedTicker;
 
@@ -28,38 +25,26 @@ public class IncidentRepo {
 	private JdbcTemplate jdbcTemplate;
 	
 	
-	 public void addIncident(Incident inc) { 
+	
+	 
+	public void addIncident(AggregatedIncident inc) { 
 		  String insertQuery = "Insert into Incident(IncidentYear,LocalityId,OffenseId,IncidentCount) Values(?,?,?,?,?)";
 		  jdbcTemplate.update(insertQuery,new Object[] {inc.getIncidentYear(),inc.getLocalityId(),inc.getOffenseId(), inc.getCount()}); 
 		 }
 	 
-
-	public List<Incident> getIncidents() {
-
-		String selectQuery = "Select i.IncidentId,  i.IncidentYear,i.IncidentCount, o.OffenseId,o.OffenseName, l.LocalityId, l.LocalityName, l.Area, "
-				+ "l.Division, l.Latitude, l.Longitude,s.StateId, s.StateName,r.RegionId, r.RegionName,c.CountryId,c.CountryName"
-				+ " from Incident i join Offence o on i.OffenseId=o.OffenseId join Locality l on i.LocalityId = l.LocalityId join State s "
-				+ "on l.StateId=s.StateId join Region r  on s.RegionId = r.RegionId join Country c on r.CountryId=c.CountryId limit 2000, 200";
-
-		List<Incident> incidents = jdbcTemplate.query(selectQuery, new IncidentMapper());
-		return incidents;
-	}
-
+	
 
 	public String addOrUpdateIncident(AddIncidentRequest inc, int localityId) {
 		LocalDateTime dt= LocalDateTime.now();
 		int year = dt.getYear();
 		System.out.println(dt.toString());
 		String incidentId;
-		String selectQuery = "Select i.IncidentId,  i.IncidentYear,i.IncidentCount, o.OffenseId,o.OffenseName, l.LocalityId,"
-				+ " l.LocalityName, l.Area, l.Division, l.Latitude, l.Longitude,s.StateId, s.StateName,r.RegionId, "
-				+ "r.RegionName,c.CountryId,c.CountryName from Incident i join Offence o on i.OffenseId=o.OffenseId join"
-				+ " Locality l on i.LocalityId = l.LocalityId join State s on l.StateId=s.StateId join Region r  "
-				+ "on s.RegionId = r.RegionId join Country c on r.CountryId=c.CountryId where l.LocalityId=? and o.OffenseId=?";
-		List<Incident> incidents = jdbcTemplate.query(selectQuery,new Object[] {localityId,inc.getOffenseId()}, new IncidentMapper());
+		String selectQuery = "Select i.IncidentId from Incident i join Offence o on i.OffenseId=o.OffenseId join"
+				+ " Locality l on i.LocalityId = l.LocalityId  where l.LocalityId=? and o.OffenseId=?";
+		List<Integer> incidents = jdbcTemplate.queryForList(selectQuery,new Object[] {localityId,inc.getOffenseId()}, Integer.class);
 		if(incidents.size()>0) {
-			String insertQuery = "Update Incident  set IncidentCount=? where IncidentId=?";
-			jdbcTemplate.update(insertQuery,new Object[] {incidents.get(0).getCount()+1,incidents.get(0).getIncidentId()}); 
+			String insertQuery = "Update Incident  set IncidentCount=IncidentCount+1 where IncidentId=?";
+			jdbcTemplate.update(insertQuery,new Object[] {incidents.get(0).intValue()}); 
 		}else { 
 			String insertQuery = "Insert into Incident(IncidentYear,LocalityId,OffenseId,IncidentCount)"
 					+ " Values(?,?,?,?)";
@@ -87,29 +72,6 @@ public class IncidentRepo {
 		
 	}
 
-
-	public List<Incident> getIncidentsListByStateFormatted(String stateName) {
-		String selectQuery = "Select i.IncidentId,  i.IncidentYear,i.IncidentCount, o.OffenseId,o.OffenseName, l.LocalityId, "
-				+ "l.LocalityName, l.Area, l.Division, l.Latitude, l.Longitude,s.StateId, s.StateName,r.RegionId, r.RegionName,"
-				+ "c.CountryId,c.CountryName from Incident i join Offence o on i.OffenseId=o.OffenseId join Locality l "
-				+ "on i.LocalityId = l.LocalityId join State s on l.StateId=s.StateId join Region r  on s.RegionId = r.RegionId"
-				+ " join Country c on r.CountryId=c.CountryId where s.StateName=?";
-		List<Incident> incidents = jdbcTemplate.query(selectQuery,new Object[] {stateName}, new IncidentMapper());
-		return incidents;
-	}
-
-
-	public List<Incident> getIncidentsListByLatLngFormatted(double lat, double lng) {
-		String selectQuery = "Select i.IncidentId,  i.IncidentYear,i.IncidentCount, o.OffenseId,o.OffenseName, l.LocalityId, "
-				+ "l.LocalityName, l.Area, l.Division, l.Latitude, l.Longitude,s.StateId, s.StateName,r.RegionId, r.RegionName,"
-				+ "c.CountryId,c.CountryName from Incident i join Offence o on i.OffenseId=o.OffenseId join Locality l "
-				+ "on i.LocalityId = l.LocalityId join State s on l.StateId=s.StateId join Region r  on s.RegionId = r.RegionId"
-				+ " join Country c on r.CountryId=c.CountryId where (l.Latitude between ? AND ?) AND (l.Longitude between ? AND ?)";
-		List<Incident> incidents = jdbcTemplate.query(selectQuery,new Object[] {lat-0.50, lat+0.50, lng-0.50, lng+0.50}, 
-				new IncidentMapper());
-		return incidents;
-	}
-	
 	public int getCount(double lat, double lng) {
 		int count =0;
 		String selectQuery = "Select sum(i.IncidentCount) from Incident i join Offence o on i.OffenseId=o.OffenseId join Locality l "

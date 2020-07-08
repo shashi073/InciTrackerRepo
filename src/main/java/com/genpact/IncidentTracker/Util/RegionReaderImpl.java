@@ -59,7 +59,7 @@ public class RegionReaderImpl
     		reg.setRegionCode((Long) employee.get("region_code"));
     		reg.setRegionName((String) employee.get("region_name"));
     		reg.setRegionDesc((String) employee.get("region_desc"));
-    		getCountry(reg, "USA", countryList);
+    		getCountry(reg, "IN", countryList);
     		regionList.add(reg);
     	}
        

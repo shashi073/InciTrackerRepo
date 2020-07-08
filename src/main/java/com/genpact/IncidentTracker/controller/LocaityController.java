@@ -18,14 +18,16 @@ public class LocaityController {
 	@Autowired
 	private LocalityService lService;
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/addLocalities")
-	public void addLocalities() {
-		//Dont Use Data has been already updated
-	    // lService.addLocalities();;
-	}
+	/*
+	 * @RequestMapping(method = RequestMethod.GET, value = "/addLocalities") public
+	 * void addLocalities() { //Dont Use Data has been already updated //
+	 * lService.addLocalities();; }
+	 */
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/getLocalities")
-	public List<Locality> getLocalities() {
-	     return lService.getLocalities();
-	}
+	 @RequestMapping(method = RequestMethod.GET, value = "/getLocalities") 
+	 public List<Locality> getLocalities() 
+	 {
+		 return lService.getLocalities(); 
+	 }
+	 
 }

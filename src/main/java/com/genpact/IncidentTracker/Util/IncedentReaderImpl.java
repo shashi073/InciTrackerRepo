@@ -7,20 +7,22 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
 
-import com.genpact.IncidentTracker.model.Incident;
+import com.genpact.IncidentTracker.model.AggregatedIncident;
+import com.genpact.IncidentTracker.model.LiveIncident;
 import com.genpact.IncidentTracker.model.Offense;
 
 @Service
 public class IncedentReaderImpl {
 		
 		
-	public List<Incident> readData(String ori,int localityId, List<Offense> offenses) {
-		List<Incident> incidents = new ArrayList<Incident>();
+	public List<AggregatedIncident> readData(String ori,int localityId, List<Offense> offenses) {
+		List<AggregatedIncident> incidents = new ArrayList<AggregatedIncident>();
 			try {
 			  String preUrl ="https://api.usa.gov/crime/fbi/sapi/api/summarized/agencies/";
 			  String postUrl="/offenses/2018/2018?API_KEY=dYjQZYmnzBQuzn506C4ads4ECn4b0yapmXxn8BDQ";
@@ -51,12 +53,12 @@ public class IncedentReaderImpl {
 		return incidents;
 	 }
 	
-	private static void parseEmployeeObject(JSONObject employee, int localityId, List<Offense> offenses, List<Incident> incidents) 
+	private static void parseEmployeeObject(JSONObject employee, int localityId, List<Offense> offenses, List<AggregatedIncident> incidents) 
 	{
 	   
 		if(employee.get("data_year")!=null && employee.get("offense") != null 
 				&& employee.get("actual")!=null) {
-			Incident inc=new Incident();
+			AggregatedIncident inc=new AggregatedIncident();
 			inc.setIncidentYear(((Long) employee.get("data_year")).toString());
 			inc.setCount(((Long) employee.get("actual")).intValue());
 			inc.setOffenceName((String) employee.get("offense"));
@@ -71,7 +73,7 @@ public class IncedentReaderImpl {
 	    
 	    
 	}
-	private static void getOffense(Incident inc,   List<Offense> offenses) 
+	private static void getOffense(AggregatedIncident inc,   List<Offense> offenses) 
 	{
 	   
 		for(Offense o: offenses) {

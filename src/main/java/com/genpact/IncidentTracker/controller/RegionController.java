@@ -17,14 +17,18 @@ public class RegionController {
 	@Autowired
 	private RegionService rService;
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/addRegions")
-	public void addRegions() {
-		//Dont Use Data has been already updated
-	   // rService.addRegions();;
-	}
-	
-	@RequestMapping(method = RequestMethod.GET, value = "/getRegions")
-	public List<Region> getRegions() {
-	     return rService.getRegions();
-	}
+	/*
+	 * @RequestMapping(method = RequestMethod.GET, value = "/addRegions") 
+	 * public void addRegions() 
+	 * {
+	 *  //Dont Use Data has been already updated //
+	 * rService.addRegions();
+	 *  }
+	 */
+	  @RequestMapping(method = RequestMethod.GET, value = "/getRegions") 
+	  public List<Region> getRegions() 
+	  { 
+		  return rService.getRegions(); 
+	  }
+	 
 }

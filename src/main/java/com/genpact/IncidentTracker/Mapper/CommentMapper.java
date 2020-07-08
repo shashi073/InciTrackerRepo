@@ -4,9 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
-
 import com.genpact.IncidentTracker.model.Comment;
-import com.genpact.IncidentTracker.model.Country;
 
 public class CommentMapper implements RowMapper<Comment> 
 {
