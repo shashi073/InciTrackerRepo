@@ -1,5 +1,7 @@
 package com.genpact.IncidentTracker.model;
 
+import java.time.LocalDateTime;
+
 public class AddIncidentRequest {
 
 	
@@ -11,8 +13,15 @@ public class AddIncidentRequest {
 	public double longitude;
 	public String stateName;
 	public String description;
+	public LocalDateTime incidentDateTime;
 	
 	
+	public LocalDateTime getIncidentDateTime() {
+		return incidentDateTime;
+	}
+	public void setIncidentDateTime(LocalDateTime incidentDateTime) {
+		this.incidentDateTime = incidentDateTime;
+	}
 	public int getOffenseId() {
 		return offenseId;
 	}

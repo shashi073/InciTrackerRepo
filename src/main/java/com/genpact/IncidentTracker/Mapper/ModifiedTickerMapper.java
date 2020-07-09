@@ -3,17 +3,17 @@ package com.genpact.IncidentTracker.Mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
-import com.genpact.IncidentTracker.model.ModifiedTicker;
+import com.genpact.IncidentTracker.model.Ticker;
 
-public class ModifiedTickerMapper implements RowMapper<ModifiedTicker> {
+public class ModifiedTickerMapper implements RowMapper<Ticker> {
 
 	@Override
-	public ModifiedTicker mapRow(ResultSet rs, int rowNum) throws SQLException {
-		ModifiedTicker i = new ModifiedTicker();
+	public Ticker mapRow(ResultSet rs, int rowNum) throws SQLException {
+		Ticker i = new Ticker();
 		
-		i.setIncidentId(rs.getInt("IncidentId"));
-		i.setOffenseId(rs.getInt("OffenseId"));
-		i.setOffenceName(rs.getString("OffenseName"));
+		i.setOffenceName(rs.getString(1));
+		i.setCount(rs.getInt(2));
+		
 		return i;
 	}
 	

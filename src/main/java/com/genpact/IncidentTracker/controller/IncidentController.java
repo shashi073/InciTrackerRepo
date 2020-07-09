@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.genpact.IncidentTracker.model.AddIncidentRequest;
 import com.genpact.IncidentTracker.model.LiveIncident;
-import com.genpact.IncidentTracker.model.ModifiedTicker;
+import com.genpact.IncidentTracker.model.Ticker;
 import com.genpact.IncidentTracker.service.IncidentService;
 
 @RestController
@@ -43,8 +43,12 @@ public class IncidentController {
 		return iService.getLiveIncidentsListByLatLngFormatted(lat, lng);
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/getTickerListByLatLngFormatted")
-	public List<ModifiedTicker> getTickerListByLatLngFormatted(double lat, double lng){
+	public List<Ticker> getTickerListByLatLngFormatted(double lat, double lng){
 		return iService.getTickerListByLatLngFormatted(lat, lng);
+	}
+	@RequestMapping(method = RequestMethod.GET, value = "/getTickerListByLatLngAndDays")
+	public List<Ticker> getTickerListByLatLngAndDays(double lat, double lng, int noOfDays){
+		return iService.getTickerListByLatLngAndDays(lat, lng, noOfDays);
 	}
 	
 }
