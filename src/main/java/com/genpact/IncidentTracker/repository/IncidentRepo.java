@@ -4,13 +4,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+
 import com.genpact.IncidentTracker.Mapper.LiveIncidentMapper;
 import com.genpact.IncidentTracker.Mapper.ModifiedTickerMapper;
 import com.genpact.IncidentTracker.model.AddIncidentRequest;
@@ -35,8 +38,8 @@ public class IncidentRepo {
 	
 
 	public String addOrUpdateIncident(AddIncidentRequest inc, int localityId) {
-		LocalDateTime dt= LocalDateTime.now();
-		int year = dt.getYear();
+		String incidentDateTime= LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		System.out.println(incidentDateTime);
 		String incidentId;
 		
 		final String INSERT_SQL = "Insert into LiveIncident(OffenseId,LocalityId,Description,CreatedDate,IncidentLatitude,IncidentLongitude) Values(?,?,?,?,?,?)";
@@ -49,7 +52,7 @@ public class IncidentRepo {
 		            ps.setInt(1,inc.getOffenseId());
 		            ps.setInt(2, localityId);
 		            ps.setString(3, inc.getDescription());
-		            ps.setString(4, dt.toString());
+		            ps.setString(4, incidentDateTime);
 		            ps.setDouble(5, inc.getLatitude());
 		            ps.setDouble(6, inc.getLatitude());
 		            return ps;
@@ -64,8 +67,8 @@ public class IncidentRepo {
 
 	public int getCount(double lat, double lng) {
 		int count =0;
-		LocalDateTime maxDate = LocalDateTime.now();
-		LocalDateTime minDate = maxDate.minusDays(15);
+		String maxDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		String minDate = LocalDateTime.now().minusDays(15).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 		String selectQuery = "Select count(1) from LiveIncident  where (IncidentLatitude between ? AND ?) "
 							+ "AND (IncidentLongitude between ? AND ?) AND (CreatedDate between ? AND ?)";
 		List<Integer> incidents = jdbcTemplate.queryForList(selectQuery,new Object[] {lat-0.0050, lat+0.0050, lng-0.0050, lng+0.0050,
@@ -78,8 +81,8 @@ public class IncidentRepo {
 	}
 	
 	public List<LiveIncident> getLiveIncidentsListByLatLngFormatted(double lat, double lng) {
-		LocalDateTime maxDate = LocalDateTime.now();
-		LocalDateTime minDate = maxDate.minusDays(15);
+		String maxDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		String minDate = LocalDateTime.now().minusDays(15).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 		String selectQuery = "Select i.IncidentId,  i.CreatedDate,i.Description, o.OffenseId,o.OffenseName, l.LocalityId, "
 				+ "l.LocalityName, l.Area, l.Division, i.IncidentLatitude, i.IncidentLongitude,s.StateId, s.StateName,r.RegionId, "
 				+ "r.RegionName, c.CountryId,c.CountryName from LiveIncident i join Offence o on i.OffenseId=o.OffenseId join Locality l "
@@ -92,8 +95,8 @@ public class IncidentRepo {
 	}
 	
 	public List<Ticker> getTickerListByLatLngFormatted(double lat, double lng) {
-		LocalDateTime maxDate = LocalDateTime.now();
-		LocalDateTime minDate = maxDate.minusDays(15);
+		String maxDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		String minDate = LocalDateTime.now().minusDays(15).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 		String selectQuery = "Select o.OffenseName,count(1) from LiveIncident i join Offence o on i.OffenseId=o.OffenseId "
 				+ "where (i.IncidentLatitude between ? AND ?) AND (i.IncidentLongitude between ? AND ?) "
 				+ "AND (i.CreatedDate between ? AND ?) group by o.OffenseId";
@@ -103,8 +106,8 @@ public class IncidentRepo {
 	}
 	
 	public List<Ticker> getTickerListByLatLngAndDays(double lat, double lng,int noOfDays ) {
-		LocalDateTime maxDate = LocalDateTime.now();
-		LocalDateTime minDate = maxDate.minusDays(noOfDays);
+		String maxDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		String minDate = LocalDateTime.now().minusDays(noOfDays).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 		String selectQuery = "Select o.OffenseName,count(1) from LiveIncident i join Offence o on i.OffenseId=o.OffenseId "
 				+ " where (i.IncidentLatitude between ? AND ?) AND (i.IncidentLongitude between ? AND ?)"
 				+ " AND (i.CreatedDate between ? AND ?) group by o.OffenseId";
