@@ -56,8 +56,9 @@ public class LocalityRepo {
 		String selectQuery = "Select l.LocalityId, l.Ori,l.LocalityName, l.Area, l.Division, l.Latitude, l.Longitude,s.StateId,"
 				+ "s.StateName,s.StateAbbr, r.RegionId, r.RegionName,c.CountryId,c.CountryName from Locality l join State s "
 				+ "on l.StateId=s.StateId join Region r  on s.RegionId = r.RegionId join Country c on r.CountryId=c.CountryId "
-				+ "where latitude=? and longitude=?";
-		List<Locality> localities = jdbcTemplate.query(selectQuery,new Object[] {locality.getLatitude(),locality.getLongitude()}, new LocalityMapper());
+				+ "where (l.Latitude between ? AND ?) AND (l.Longitude between ? AND ?)";
+		List<Locality> localities = jdbcTemplate.query(selectQuery,new Object[] {locality.getLatitude()-0.0050,
+				locality.getLatitude()+0.0050,locality.getLongitude()-0.0050, locality.getLongitude()+0.0050}, new LocalityMapper());
 		if(localities.size()>0) {
 			localityId=localities.get(0).getLocalityId();
 		}

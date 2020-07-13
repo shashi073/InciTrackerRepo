@@ -37,21 +37,9 @@ public class IncidentRepo {
 	public String addOrUpdateIncident(AddIncidentRequest inc, int localityId) {
 		LocalDateTime dt= LocalDateTime.now();
 		int year = dt.getYear();
-		System.out.println(dt.toString());
 		String incidentId;
-		String selectQuery = "Select i.IncidentId from Incident i join Offence o on i.OffenseId=o.OffenseId join"
-				+ " Locality l on i.LocalityId = l.LocalityId  where l.LocalityId=? and o.OffenseId=?";
-		List<Integer> incidents = jdbcTemplate.queryForList(selectQuery,new Object[] {localityId,inc.getOffenseId()}, Integer.class);
-		if(incidents.size()>0) {
-			String insertQuery = "Update Incident  set IncidentCount=IncidentCount+1 where IncidentId=?";
-			jdbcTemplate.update(insertQuery,new Object[] {incidents.get(0).intValue()}); 
-		}else { 
-			String insertQuery = "Insert into Incident(IncidentYear,LocalityId,OffenseId,IncidentCount)"
-					+ " Values(?,?,?,?)";
-			jdbcTemplate.update(insertQuery,new Object[] {year,localityId,inc.getOffenseId(),1}); 
-		}
 		
-		final String INSERT_SQL = "Insert into LiveIncident(OffenseId,LocalityId,Description,CreatedDate) Values(?,?,?,?)";
+		final String INSERT_SQL = "Insert into LiveIncident(OffenseId,LocalityId,Description,CreatedDate,IncidentLatitude,IncidentLongitude) Values(?,?,?,?,?,?)";
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		jdbcTemplate.update(
 		    new PreparedStatementCreator() {
@@ -62,6 +50,8 @@ public class IncidentRepo {
 		            ps.setInt(2, localityId);
 		            ps.setString(3, inc.getDescription());
 		            ps.setString(4, dt.toString());
+		            ps.setDouble(5, inc.getLatitude());
+		            ps.setDouble(6, inc.getLatitude());
 		            return ps;
 		        }
 		    },
@@ -74,15 +64,12 @@ public class IncidentRepo {
 
 	public int getCount(double lat, double lng) {
 		int count =0;
-		LocalDateTime dt = LocalDateTime.now();
-		System.out.println(dt.toString());
-		LocalDateTime dt1 =dt.minusDays(365);
-		System.out.println(dt1.toString());
-		String selectQuery = "Select sum(i.IncidentCount) from Incident i join Offence o on i.OffenseId=o.OffenseId join Locality l "
-				+ "on i.LocalityId = l.LocalityId join State s on l.StateId=s.StateId join Region r  on s.RegionId = r.RegionId"
-				+ " join Country c on r.CountryId=c.CountryId where (l.Latitude between ? AND ?) AND (l.Longitude between ? AND ?)";
-		List<Integer> incidents = jdbcTemplate.queryForList(selectQuery,new Object[] {lat-0.50, lat+0.50, lng-0.50, lng+0.50},
-										Integer.class);
+		LocalDateTime maxDate = LocalDateTime.now();
+		LocalDateTime minDate = maxDate.minusDays(15);
+		String selectQuery = "Select count(1) from LiveIncident  where (IncidentLatitude between ? AND ?) "
+							+ "AND (IncidentLongitude between ? AND ?) AND (CreatedDate between ? AND ?)";
+		List<Integer> incidents = jdbcTemplate.queryForList(selectQuery,new Object[] {lat-0.0050, lat+0.0050, lng-0.0050, lng+0.0050,
+									minDate,maxDate},	Integer.class);
 		System.out.println(incidents);
 		if(incidents.size()>0) {
 			count = incidents.get(0) != null ? incidents.get(0) : 0;
@@ -92,25 +79,25 @@ public class IncidentRepo {
 	
 	public List<LiveIncident> getLiveIncidentsListByLatLngFormatted(double lat, double lng) {
 		LocalDateTime maxDate = LocalDateTime.now();
-		LocalDateTime minDate = maxDate.minusDays(7);
+		LocalDateTime minDate = maxDate.minusDays(15);
 		String selectQuery = "Select i.IncidentId,  i.CreatedDate,i.Description, o.OffenseId,o.OffenseName, l.LocalityId, "
-				+ "l.LocalityName, l.Area, l.Division, l.Latitude, l.Longitude,s.StateId, s.StateName,r.RegionId, r.RegionName,"
-				+ "c.CountryId,c.CountryName from LiveIncident i join Offence o on i.OffenseId=o.OffenseId join Locality l "
+				+ "l.LocalityName, l.Area, l.Division, i.IncidentLatitude, i.IncidentLongitude,s.StateId, s.StateName,r.RegionId, "
+				+ "r.RegionName, c.CountryId,c.CountryName from LiveIncident i join Offence o on i.OffenseId=o.OffenseId join Locality l "
 				+ "on i.LocalityId = l.LocalityId join State s on l.StateId=s.StateId join Region r  on s.RegionId = r.RegionId"
-				+ " join Country c on r.CountryId=c.CountryId where (l.Latitude between ? AND ?) AND (l.Longitude between ? AND ?)"
-				+ "AND (i.CreatedDate between ? AND ?)";
-		List<LiveIncident> incidents = jdbcTemplate.query(selectQuery,new Object[] {lat-0.50, lat+0.50, lng-0.50, lng+0.50, minDate, maxDate}, 
-				new LiveIncidentMapper());
+				+ " join Country c on r.CountryId=c.CountryId where (i.IncidentLatitude between ? AND ?) "
+				+ "AND (i.IncidentLongitude between ? AND ?) AND (i.CreatedDate between ? AND ?)";
+		List<LiveIncident> incidents = jdbcTemplate.query(selectQuery,new Object[] {lat-0.0050, lat+0.0050, lng-0.0050, lng+0.0050,
+									minDate, maxDate}, 	new LiveIncidentMapper());
 		return incidents;
 	}
 	
 	public List<Ticker> getTickerListByLatLngFormatted(double lat, double lng) {
 		LocalDateTime maxDate = LocalDateTime.now();
-		LocalDateTime minDate = maxDate.minusDays(7);
+		LocalDateTime minDate = maxDate.minusDays(15);
 		String selectQuery = "Select o.OffenseName,count(1) from LiveIncident i join Offence o on i.OffenseId=o.OffenseId "
-				+ "join Locality l on i.LocalityId = l.LocalityId  where (l.Latitude between ? AND ?) "
-				+ "AND (l.Longitude between ? AND ?) AND (i.CreatedDate between ? AND ?) group by o.OffenseId";
-		List<Ticker> tickers= jdbcTemplate.query(selectQuery,new Object[] {lat-0.50, lat+0.50, lng-0.50, lng+0.50, minDate, maxDate}, 
+				+ "where (i.IncidentLatitude between ? AND ?) AND (i.IncidentLongitude between ? AND ?) "
+				+ "AND (i.CreatedDate between ? AND ?) group by o.OffenseId";
+		List<Ticker> tickers= jdbcTemplate.query(selectQuery,new Object[] {lat-0.0050, lat+0.0050, lng-0.0050, lng+0.0050, minDate, maxDate}, 
 				new ModifiedTickerMapper());
 		return tickers;
 	}
@@ -119,9 +106,9 @@ public class IncidentRepo {
 		LocalDateTime maxDate = LocalDateTime.now();
 		LocalDateTime minDate = maxDate.minusDays(noOfDays);
 		String selectQuery = "Select o.OffenseName,count(1) from LiveIncident i join Offence o on i.OffenseId=o.OffenseId "
-				+ "join Locality l on i.LocalityId = l.LocalityId  where (l.Latitude between ? AND ?) "
-				+ "AND (l.Longitude between ? AND ?) AND (i.CreatedDate between ? AND ?) group by o.OffenseId";
-		List<Ticker> tickers= jdbcTemplate.query(selectQuery,new Object[] {lat-0.50, lat+0.50, lng-0.50, lng+0.50, minDate, maxDate}, 
+				+ " where (i.IncidentLatitude between ? AND ?) AND (i.IncidentLongitude between ? AND ?)"
+				+ " AND (i.CreatedDate between ? AND ?) group by o.OffenseId";
+		List<Ticker> tickers= jdbcTemplate.query(selectQuery,new Object[] {lat-0.0050, lat+0.0050, lng-0.0050, lng+0.0050, minDate, maxDate}, 
 				new ModifiedTickerMapper());
 		return tickers;
 	}

@@ -22,8 +22,8 @@ public class LiveIncidentMapper implements RowMapper<LiveIncident> {
 		i.setLocalityName(rs.getString("LocalityName"));
 		i.setArea(rs.getString("Area"));
 		i.setDivision(rs.getString("Division"));
-		i.setLatitude(rs.getDouble("Latitude"));
-		i.setLongitude(rs.getDouble("Longitude"));
+		i.setLatitude(rs.getDouble("IncidentLatitude"));
+		i.setLongitude(rs.getDouble("IncidentLongitude"));
 		i.setStateId(rs.getInt("StateId"));
 		i.setStateName(rs.getString("StateName"));
 		i.setRegionId(rs.getInt("RegionId"));
