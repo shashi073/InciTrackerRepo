@@ -22,9 +22,9 @@ public class OtpController {
 	   tClient.sendOtp(user); 
 	}
 	@RequestMapping(method = RequestMethod.POST, value = "/validateOtp") 
-	public void validateOtp(@RequestBody User user) { 
+	public String validateOtp(@RequestBody User user) { 
 	   //Dont Use Data has been already updated
-	   tClient.validateOtp(user); 
+	   return tClient.validateOtp(user); 
 	}
 	
 	
