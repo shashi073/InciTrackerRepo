@@ -39,11 +39,14 @@ public class UserRepo {
 	}
 
 	public boolean checkEmailIdAvailability(User user) {
-		boolean status = false;
+		boolean status = true;
 		String selectQuery = "Select UserId,UserName,Email,MobileNo from User where Email=?";
 		List<User> users = jdbcTemplate.query(selectQuery, new Object[] {user.getEmailId()}, new UserMapper());
 		if(users.size()>0) {
 			status = true;
+		}
+		else {
+			status =false;
 		}
 		return status; 
 	}
