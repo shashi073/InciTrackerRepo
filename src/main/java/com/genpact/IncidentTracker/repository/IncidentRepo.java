@@ -54,7 +54,7 @@ public class IncidentRepo {
 		            ps.setString(3, inc.getDescription());
 		            ps.setString(4, incidentDateTime);
 		            ps.setDouble(5, inc.getLatitude());
-		            ps.setDouble(6, inc.getLatitude());
+		            ps.setDouble(6, inc.getLongitude());
 		            return ps;
 		        }
 		    },
@@ -73,7 +73,6 @@ public class IncidentRepo {
 							+ "AND (IncidentLongitude between ? AND ?) AND (CreatedDate between ? AND ?)";
 		List<Integer> incidents = jdbcTemplate.queryForList(selectQuery,new Object[] {lat-0.0050, lat+0.0050, lng-0.0050, lng+0.0050,
 									minDate,maxDate},	Integer.class);
-		System.out.println(incidents);
 		if(incidents.size()>0) {
 			count = incidents.get(0) != null ? incidents.get(0) : 0;
 		}
