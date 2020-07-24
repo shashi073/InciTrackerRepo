@@ -4,8 +4,15 @@ public class Ticker {
 
 	public String offenceName;
 	public int count;
+	public String coulourCode;
 	
 	
+	public String getCoulourCode() {
+		return coulourCode;
+	}
+	public void setCoulourCode(String coulourCode) {
+		this.coulourCode = coulourCode;
+	}
 	public int getCount() {
 		return count;
 	}

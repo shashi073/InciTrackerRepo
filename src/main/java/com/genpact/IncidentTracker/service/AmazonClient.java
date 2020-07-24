@@ -85,7 +85,7 @@ public class AmazonClient {
 	private String uploadFileTos3bucket(String fileName, File file) {
 		
 		//s3client.putObject(
-			//	new PutObjectRequest(bucketName, fileName, file));
+		//		new PutObjectRequest(bucketName, fileName, file));
 		s3client.putObject(
 				new PutObjectRequest(bucketName, fileName, file).withCannedAcl(CannedAccessControlList.PublicRead));
 		String publicFilePath= s3client.getUrl(bucketName, fileName).toExternalForm();  

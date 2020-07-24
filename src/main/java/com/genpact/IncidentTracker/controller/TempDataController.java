@@ -22,7 +22,7 @@ public class TempDataController {
 	@RequestMapping(method = RequestMethod.GET, value = "/addTempIncidents") 
 	public void addTempIncidents(@RequestParam int startIndex) { 
 	   //Dont Use Data has been already updated
-	   //tService.prepareAndInsertData(startIndex); 
+	  // tService.prepareAndInsertData(startIndex); 
 	}
 	
 	

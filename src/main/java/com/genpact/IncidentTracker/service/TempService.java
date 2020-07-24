@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.genpact.IncidentTracker.model.AddIncidentRequest;
 import com.genpact.IncidentTracker.model.Locality;
-import com.genpact.IncidentTracker.repository.LocalityRepo;
-import com.genpact.IncidentTracker.repository.StateRepo;
 import com.genpact.IncidentTracker.repository.TempRepository;
 
 @Service
@@ -28,17 +26,14 @@ public class TempService {
 		for(Locality l : localityList) {
 			System.out.println("Getting data Loaclity-" + ++count);
 			List<AddIncidentRequest> iList = new ArrayList<AddIncidentRequest>();
-			int incidentId = tRepo.getIncidentId(l.getLatitude(), l.getLongitude());
-			if(incidentId==0) {
+			
 				System.out.println("Preparing data Loaclity-" +count);
-				getDataForDays(iList,l,0,8,10);
-				getDataForDays(iList,l,8,31,15);
-				getDataForDays(iList,l,31,90,20);
-				getDataForDays(iList,l,90,180,25);
-				getDataForDays(iList,l,180,366,30);
-			}else {
-				System.out.println("Preparing data Loaclity skipped-" +count);
-			}
+				getDataForDays(iList,l,0,6,7);
+				//getDataForDays(iList,l,8,31,15);
+				//getDataForDays(iList,l,31,90,20);
+				//getDataForDays(iList,l,90,180,25);
+				//getDataForDays(iList,l,180,366,30);
+			
 			System.out.println("Data Prepared for Loaclity-" +count+"-"+iList.size());
 			for(int i =0 ; i<iList.size() ; i++) {
 				System.out.println("Processing Incident Count -" + (i+1) +"for locality -"+count);

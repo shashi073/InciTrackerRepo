@@ -21,6 +21,15 @@ public class LiveIncident {
 	public String regionName;
 	public int countryId;
 	public String countryName;
+	public String coulourCode;
+	
+	
+	public String getCoulourCode() {
+		return coulourCode;
+	}
+	public void setCoulourCode(String coulourCode) {
+		this.coulourCode = coulourCode;
+	}
 	public int getIncidentId() {
 		return incidentId;
 	}
