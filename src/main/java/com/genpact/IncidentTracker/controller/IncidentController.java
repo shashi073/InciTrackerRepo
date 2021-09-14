@@ -50,5 +50,9 @@ public class IncidentController {
 	public List<Ticker> getTickerListByLatLngAndDays(double lat, double lng, int noOfDays){
 		return iService.getTickerListByLatLngAndDays(lat, lng, noOfDays);
 	}
+	@RequestMapping(method = RequestMethod.GET, value = "/getHistoricIncident")
+	public List<LiveIncident> getHistoricIncident(double lat, double lng,  int noOfDays){
+		return iService.getHistoricIncident(lat, lng, noOfDays);
+	}
 	
 }

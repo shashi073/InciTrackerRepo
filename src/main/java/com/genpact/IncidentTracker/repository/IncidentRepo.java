@@ -114,4 +114,20 @@ public class IncidentRepo {
 				new ModifiedTickerMapper());
 		return tickers;
 	}
+
+
+
+	public List<LiveIncident> getHistoricIncident(double lat, double lng, int noOfDays) {
+		String maxDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		String minDate = LocalDateTime.now().minusDays(noOfDays).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		String selectQuery = "Select i.IncidentId,  i.CreatedDate,i.Description, o.OffenseId,o.OffenseName, l.LocalityId, "
+				+ "l.LocalityName, l.Area, l.Division, i.IncidentLatitude, i.IncidentLongitude,s.StateId, s.StateName,r.RegionId, "
+				+ "r.RegionName, c.CountryId,c.CountryName from LiveIncident i join Offence o on i.OffenseId=o.OffenseId join Locality l "
+				+ "on i.LocalityId = l.LocalityId join State s on l.StateId=s.StateId join Region r  on s.RegionId = r.RegionId"
+				+ " join Country c on r.CountryId=c.CountryId where (i.IncidentLatitude between ? AND ?) "
+				+ "AND (i.IncidentLongitude between ? AND ?) AND (i.CreatedDate between ? AND ?) ";
+		List<LiveIncident> incidents = jdbcTemplate.query(selectQuery,new Object[] {lat-0.0050, lat+0.0050, lng-0.0050, lng+0.0050,
+									minDate, maxDate}, 	new LiveIncidentMapper());
+		return incidents;
+	}
 }

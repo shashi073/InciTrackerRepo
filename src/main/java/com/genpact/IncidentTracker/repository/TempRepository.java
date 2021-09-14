@@ -41,8 +41,9 @@ public class TempRepository {
 	public List<Locality> getLocalities(int startIndex) {
 		String selectQuery = "Select l.LocalityId, l.Ori,l.LocalityName, l.Area, l.Division, l.Latitude, l.Longitude,s.StateId,"
 				+ "s.StateName,s.StateAbbr, r.RegionId, r.RegionName,c.CountryId,c.CountryName from Locality l join State s "
-				+ "on l.StateId=s.StateId join Region r  on s.RegionId = r.RegionId join Country c on r.CountryId=c.CountryId limit ?,?";
-		List<Locality> localities = jdbcTemplate.query(selectQuery, new Object[] {startIndex, 3500},new LocalityMapper());
+				+ "on l.StateId=s.StateId join Region r  on s.RegionId = r.RegionId join Country c on r.CountryId=c.CountryId "
+				+ "where localityId=32912 limit ?,?";
+		List<Locality> localities = jdbcTemplate.query(selectQuery, new Object[] {startIndex, 5},new LocalityMapper());
 		return localities;
 	}
 	

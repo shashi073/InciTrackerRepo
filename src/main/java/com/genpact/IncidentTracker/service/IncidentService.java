@@ -99,5 +99,11 @@ public class IncidentService {
 	public List<Ticker> getTickerListByLatLngAndDays(double lat, double lng, int noOfDays){
 		return iRepo.getTickerListByLatLngAndDays(lat, lng, noOfDays);
 	}
+
+
+
+	public List<LiveIncident> getHistoricIncident(double lat, double lng,  int noOfDays) {
+		return iRepo.getHistoricIncident(lat, lng, noOfDays);
+	}
 	
 }

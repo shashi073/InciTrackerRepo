@@ -28,7 +28,7 @@ public class TempService {
 			List<AddIncidentRequest> iList = new ArrayList<AddIncidentRequest>();
 			
 				System.out.println("Preparing data Loaclity-" +count);
-				getDataForDays(iList,l,0,6,7);
+				getDataForDays(iList,l,0,6,10);
 				//getDataForDays(iList,l,8,31,15);
 				//getDataForDays(iList,l,31,90,20);
 				//getDataForDays(iList,l,90,180,25);
